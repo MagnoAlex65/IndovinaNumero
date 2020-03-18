@@ -19,10 +19,9 @@ public class IndoNumeroController {
 	private int TMAX = 7;
 	private int segreto = 0;
 	private int tentavi = 0;
-	
+	 
 	private boolean InGame = false;
 	
-
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -60,6 +59,8 @@ public class IndoNumeroController {
     	boxGioco.setDisable(false);
     	txtCurr.setText(String.format("%d", this.tentavi));
     	txtMax.setText(String.format("%d", this.TMAX));
+    	txtLog.setText(("Indovina un numero da 1 a ") + this.NMAX);
+    	txtTentativo.setText(null);
 
     }
 
@@ -67,13 +68,52 @@ public class IndoNumeroController {
     void handleProva(ActionEvent event) {
     	
     	String numS = txtTentativo.getText();
-    	if (numS.length() == 0) {
+    	if (numS.length() == 0)  {
     		txtLog.appendText("Devi inserire un numero valido\n");
+    		this.tentavi = 0;
+        	this.InGame = true;
+        	btnNuova.setDisable(true);
+        	boxGioco.setDisable(false);
+        	txtCurr.setText(String.format("%d", this.tentavi));
+        	txtMax.setText(String.format("%d", this.TMAX));
     		return; 	
     	}
     	
     	try {
     		int num = Integer.parseInt(numS);
+    		if (num < 0 || num > this.NMAX ) {
+    			// fuori range
+    			txtLog.appendText("Valore fuori dai limiti!!\n");
+    			return; }
+    		if (num==this.segreto) {
+    			// ha indovinato
+    			txtLog.appendText("Bravo hai vinto!!\n");
+    			// chiudi finestra
+    			btnNuova.setDisable(false);
+    	 		boxGioco.setDisable(true);
+    	 		this.InGame = false;	
+    		} else {
+    			// tentativo errato
+    			this.tentavi ++; 
+    			txtCurr.setText(String.format("%d", this.tentavi));
+    			if (this.tentavi == this.TMAX) {
+    				txtLog.appendText("Numero massimo di tentativi\n");
+    				txtLog.appendText("Il numero segreto era : " + this.segreto );
+    				// chiudi finestra
+    				btnNuova.setDisable(false);
+    				boxGioco.setDisable(true);
+    				this.InGame = false;	    			
+    			} else {
+    				// sono ancora in gioco
+    				if (num < this.segreto) {
+    					// troppo basso
+    					txtLog.appendText("Numero basso\n");
+    				} else {
+    					// troppo alto	
+    					txtLog.appendText("Numero alto\n");
+    				}
+    			}
+    		}	
     	} catch(NumberFormatException ex) {
     		txtLog.appendText("Devi inserire soltanto numeri\n");   
     		return; 	
