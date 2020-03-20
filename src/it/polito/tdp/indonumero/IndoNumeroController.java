@@ -59,7 +59,7 @@ public class IndoNumeroController {
     	boxGioco.setDisable(false);
     	txtCurr.setText(String.format("%d", this.tentavi));
     	txtMax.setText(String.format("%d", this.TMAX));
-    	txtLog.setText(("Indovina un numero da 1 a ") + this.NMAX);
+    	txtLog.setText(("Indovina un numero da 1 a ") + this.NMAX + "\n");
     	txtTentativo.setText(null);
 
     }
@@ -81,7 +81,7 @@ public class IndoNumeroController {
     	
     	try {
     		int num = Integer.parseInt(numS);
-    		if (num < 0 || num > this.NMAX ) {
+    		if (num < 1 || num > this.NMAX ) {
     			// fuori range
     			txtLog.appendText("Valore fuori dai limiti!!\n");
     			return; }
